@@ -23,3 +23,49 @@ Want to run this app **on your local machine**? Follow these steps:
 ```bash
 git clone https://github.com/satendravoice/attendance-generator.git
 cd attendance-generator
+
+2️⃣ Install Required Dependencies
+pip install -r requirements.txt
+3️⃣ Run the Streamlit App
+streamlit run app.py
+Your app will run at http://localhost:8501/.
+
+🌍 Hosting on Streamlit Cloud (For Free!)
+This app is live on Streamlit Cloud! No setup required, just visit:
+
+🔗 Live App URL
+
+🚀 Deploy on Streamlit Cloud
+Want to deploy this app yourself? Follow these steps:
+
+Create a GitHub Account → GitHub
+Fork This Repository → Click "Fork" (Top-right on GitHub).
+Go to Streamlit Cloud → Streamlit
+Click "New App"
+Select Your GitHub Repository
+Set File Path → app.py
+Click "Deploy" 🎉
+Your app will be live on the internet! 🚀
+
+📜 Project File Structure
+/attendance-generator
+│── app.py              # Main Streamlit Application
+│── requirements.txt    # Dependencies for Streamlit
+│── README.md           # Documentation (You're reading it!)
+🛠️ Technologies Used
+Python (Data Processing)
+Streamlit (Web Framework)
+Pandas (Data Handling)
+OpenPyXL (Excel Processing)
+📞 Support & Contact
+💬 Need help? Create an issue on GitHub or reach out:
+
+🔹 GitHub: satendravoice
+🔹 Email: satendragoshwamii@gmail.com
+
+🎉 Enjoy using the Attendance Generator!
+
+### ✅ **Final Steps**
+1. Create a file named **`README.md`** in your GitHub repository.
+2. Copy & paste the above content.
+3. Save and commit the file.
