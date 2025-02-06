@@ -1,11 +1,3 @@
-pip install pandas openpyxl
-```)  
-
-Below is the complete updated code:
-
----
-
-```python
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import pandas as pd
