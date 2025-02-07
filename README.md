@@ -57,13 +57,6 @@ The **Attendance Generator Application** is a GUI-based tool that processes Zoom
 - **Single CSV File with Multiple Sessions**: Processes a single CSV file with multiple session timestamps.
 - **Multiple CSV Files**: Processes multiple Zoom log files individually.
 
-### Steps to Generate Attendance
-1. **Select CSV File(s)**: Choose the Zoom log CSV file(s) containing participant records.
-2. **Add Sessions**: Define session start and end times along with the required minimum participation time.
-3. **Generate Attendance**: Click the `Generate Attendance` button to process the data.
-4. **Save the Output**: Choose a location to save the final attendance report in Excel format.
-5. **Review Summary**: A popup will display the number of present and absent participants per session.
-
 ## Input File Requirements
 - **Zoom Log CSV Format** (with at least these columns):
   - `Name (Original Name)` or `Name`
