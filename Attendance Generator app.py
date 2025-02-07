@@ -76,6 +76,32 @@ def get_global_times(file_path):
         global_times[name_lower] = (global_join, global_leave)
     return global_times
 
+def get_total_durations(file_path):
+    """
+    Read the CSV file (skipping the first three rows) and return a dict mapping lower-case name
+    to total duration (in minutes) by summing the 'Duration' column.
+    This ensures that the 'Duration' in the generated Attendance sheet reflects the raw CSV totals.
+    """
+    try:
+        df = pd.read_csv(file_path, skiprows=3)
+        df.columns = df.columns.str.strip()
+        # Determine the name column
+        if "Name" in df.columns:
+            name_col = "Name"
+        elif "Name (Original Name)" in df.columns:
+            name_col = "Name (Original Name)"
+        else:
+            raise ValueError(f"CSV file '{file_path}' must contain a 'Name' or 'Name (Original Name)' column.")
+        if "Duration" not in df.columns:
+            raise ValueError(f"CSV file '{file_path}' must contain a 'Duration' column to compute total duration.")
+        # Ensure Duration is numeric
+        df["Duration"] = pd.to_numeric(df["Duration"], errors="coerce")
+        df["Name_lower"] = df[name_col].str.lower()
+        durations = df.groupby("Name_lower")["Duration"].sum().to_dict()
+        return durations
+    except Exception as e:
+        raise ValueError(f"Error computing total durations from '{file_path}': {e}")
+
 def process_csv_session(file_path, session_start, session_end, time_required):
     """
     Process one CSV file for a single session.
@@ -288,7 +314,7 @@ class AttendanceApp:
 
     def generate_attendance(self):
         mode = self.mode.get()
-        # In single mode, process as before.
+        # Single file mode
         if mode == "single":
             if not self.selected_file:
                 messagebox.showerror("Error", "Please select a CSV file in Single CSV mode.")
@@ -320,7 +346,7 @@ class AttendanceApp:
                     "session_end": e_dt,
                     "time_required": time_req_val
                 })
-            # Process single file as before.
+            # Process single file sessions
             global_participants = {}
             total_sessions = len(sessions_info)
             session_labels = []
@@ -356,6 +382,17 @@ class AttendanceApp:
                 for i in range(1, total_sessions + 1):
                     if i not in participant["sessions"]:
                         participant["sessions"][i] = "A"
+            # --- NEW: Update the duration using the raw CSV's total durations ---
+            try:
+                raw_durations = get_total_durations(self.selected_file)
+            except ValueError as e:
+                messagebox.showerror("Error", str(e))
+                return
+            for name_lower, participant in global_participants.items():
+                if name_lower in raw_durations:
+                    participant["total_duration"] = raw_durations[name_lower]
+            # ---------------------------------------------------------------------
+
             output_records = []
             for participant in global_participants.values():
                 record = {
@@ -368,7 +405,6 @@ class AttendanceApp:
                     record[session_labels[i-1]] = participant["sessions"][i]
                 record["Duration"] = round(participant["total_duration"], 2)
                 output_records.append(record)
-            attendance_df = pd.DataFrame(output_records)
             try:
                 raw_log_df = pd.read_csv(self.selected_file)
             except Exception as e:
@@ -385,7 +421,7 @@ class AttendanceApp:
             try:
                 with pd.ExcelWriter(output_file, engine="openpyxl") as writer:
                     raw_log_df.to_excel(writer, sheet_name="Sheet1", index=False)
-                    attendance_df.to_excel(writer, sheet_name="Attendance", index=False)
+                    pd.DataFrame(output_records).to_excel(writer, sheet_name="Attendance", index=False)
             except Exception as e:
                 messagebox.showerror("Error", f"Error saving output Excel file: {e}")
                 return
@@ -399,8 +435,7 @@ class AttendanceApp:
             messagebox.showinfo("Attendance Generated",
                                 f"Attendance generated and saved to:\n{output_file}\n\nAttendance Summary:\n{summary_str}")
         else:
-            # Multiple mode: Process each file individually.
-            # Build a dictionary: file_path -> list of sessions for that file.
+            # Multiple file mode: Process each file individually.
             sessions_by_file = {}
             for sess in self.session_rows:
                 s_text = sess["start_entry"].get().strip()
@@ -435,7 +470,6 @@ class AttendanceApp:
                 messagebox.showerror("Error", "No session information available.")
                 return
             summary_all = {}
-            # Process each file individually.
             for file_path, sessions_info in sessions_by_file.items():
                 global_participants = {}
                 total_sessions = len(sessions_info)
@@ -472,6 +506,16 @@ class AttendanceApp:
                     for i in range(1, total_sessions + 1):
                         if i not in participant["sessions"]:
                             participant["sessions"][i] = "A"
+                # --- NEW: Update the duration using the raw CSV's total durations for this file ---
+                try:
+                    raw_durations = get_total_durations(file_path)
+                except ValueError as e:
+                    messagebox.showerror("Error", str(e))
+                    return
+                for name_lower, participant in global_participants.items():
+                    if name_lower in raw_durations:
+                        participant["total_duration"] = raw_durations[name_lower]
+                # ---------------------------------------------------------------------------
                 output_records = []
                 for participant in global_participants.values():
                     record = {
@@ -484,7 +528,6 @@ class AttendanceApp:
                         record[session_labels[i-1]] = participant["sessions"][i]
                     record["Duration"] = round(participant["total_duration"], 2)
                     output_records.append(record)
-                attendance_df = pd.DataFrame(output_records)
                 try:
                     raw_log_df = pd.read_csv(file_path)
                 except Exception as e:
@@ -496,11 +539,10 @@ class AttendanceApp:
                 try:
                     with pd.ExcelWriter(output_file, engine="openpyxl") as writer:
                         raw_log_df.to_excel(writer, sheet_name="Sheet1", index=False)
-                        attendance_df.to_excel(writer, sheet_name="Attendance", index=False)
+                        pd.DataFrame(output_records).to_excel(writer, sheet_name="Attendance", index=False)
                 except Exception as e:
                     messagebox.showerror("Error", f"Error saving output Excel file for {base}: {e}")
                     return
-                # Build session summary for this file.
                 session_summary = []
                 for i in range(1, total_sessions + 1):
                     present_count = sum(1 for p in global_participants.values() if p["sessions"].get(i, "A") == "P")
