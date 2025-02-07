@@ -5,7 +5,6 @@
 The **Attendance Generator Application** is a GUI-based tool that processes Zoom log CSV files to generate accurate attendance records. It allows users to define multiple sessions, specify session start and end times, and automatically calculates participant attendance based on their duration in the session. The application supports both single and multiple CSV file processing and outputs the final attendance report in Excel format.
 
 <img width="599" alt="image" src="https://github.com/user-attachments/assets/45cc4b57-08ed-4873-a0c4-34b703eab013" /> <img width="599" alt="image" src="https://github.com/user-attachments/assets/7354c47b-dde5-41ab-be6c-682657d7c451" />
-
 *(Screenshot of the application interface)*
 
 ## Features
@@ -38,6 +37,19 @@ The **Attendance Generator Application** is a GUI-based tool that processes Zoom
      ```
 
 ## Usage
+### Selecting Mode
+- **Single CSV File with Multiple Sessions**: Processes a single CSV file with multiple session timestamps.
+- **Multiple CSV Files**: Processes multiple Zoom log files individually.
+
+### Steps to Generate Attendance
+1. **Select CSV File(s)**: Choose the Zoom log CSV file(s) containing participant records.
+2. **Add Sessions**: Define session start and end times along with the required minimum participation time.
+   - **Session Start**: The time when the session begins. Must be in the format `YYYY-MM-DD HH:MM:SS`. Example: `2024-02-08 10:30:00`.
+   - **Session End**: The time when the session ends. Must also follow the format `YYYY-MM-DD HH:MM:SS`. Example: `2024-02-08 12:30:00`.
+   - **Time Required (min)**: The minimum number of minutes a participant must be present in a session to be marked as "Present" (`P`). If a participant attends for less than this duration, they will be marked as "Absent" (`A`).
+3. **Generate Attendance**: Click the `Generate Attendance` button to process the data.
+4. **Save the Output**: Choose a location to save the final attendance report in Excel format.
+5. **Review Summary**: A popup will display the number of present and absent participants per session.
 ### Selecting Mode
 - **Single CSV File with Multiple Sessions**: Processes a single CSV file with multiple session timestamps.
 - **Multiple CSV Files**: Processes multiple Zoom log files individually.
