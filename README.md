@@ -5,6 +5,9 @@
 The **Attendance Generator Application** is a GUI-based tool that processes Zoom log CSV files to generate accurate attendance records. It allows users to define multiple sessions, specify session start and end times, and automatically calculates participant attendance based on their duration in the session. The application supports both single and multiple CSV file processing and outputs the final attendance report in Excel format.
 
 <img width="599" alt="image" src="https://github.com/user-attachments/assets/45cc4b57-08ed-4873-a0c4-34b703eab013" /> <img width="599" alt="image" src="https://github.com/user-attachments/assets/7354c47b-dde5-41ab-be6c-682657d7c451" />
+<img width="604" alt="image" src="https://github.com/user-attachments/assets/8fda40bf-43c7-407f-a01c-9ca8dc337ed0" />
+
+
 *(Screenshot of the application interface)*
 
 ## Features
@@ -84,8 +87,10 @@ The **Attendance Generator Application** is a GUI-based tool that processes Zoom
 - If an invalid time format is entered, the application notifies the user.
 - Ensures only valid, non-overlapping session data is processed.
 
+## License
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
 ## Credits
 Developed by **Satendra Goswami**
 
 For any questions or to connect with me, find me on Instagram: [@satendragoswamii](https://www.instagram.com/satendragoswamii)
-
