@@ -31,6 +31,10 @@ The **Attendance Generator Application** is a GUI-based tool that processes Zoom
      ```bash
      pip install -r requirements.txt
      ```
+     or
+      ```bash
+     pip install pandas openpyxl tk
+     ```
 
 3. **Download the Application Files**:
    - Clone or download the script.
@@ -39,22 +43,7 @@ The **Attendance Generator Application** is a GUI-based tool that processes Zoom
    - Execute the script by running:
      ```bash
      python attendance_generator.py
-     ```
-1. **Download and Install Python (if not already installed)**:  
-   - Ensure Python 3.x is installed.
-   - Install required dependencies using:
-     ```bash
-     pip install pandas openpyxl tk
-     ```
-
-2. **Download the Application Files**:
-   - Clone or download the script.
-
-3. **Run the Application**:
-   - Execute the script by running:
-     ```bash
-     python attendance_generator.py
-     ```
+     ``` 
 
 ## Usage
 ### Selecting Mode
